@@ -6,7 +6,7 @@ Feature: Reading an account
   Scenario: An account carries the fields a statement needs
     When the seeded account is read
     Then the response carries an identifier, a type and a balance
-    And the balance carries two decimal places
+    And the balance carries no more than two decimal places
 
   Scenario: Every account in a customer's list belongs to that customer
     When the accounts of the seeded customer are listed

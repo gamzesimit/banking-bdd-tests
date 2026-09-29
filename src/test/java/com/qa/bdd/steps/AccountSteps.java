@@ -37,12 +37,16 @@ public class AccountSteps {
         assertThat((Object) response.jsonPath().get("balance")).as("an account needs a balance").isNotNull();
     }
 
-    @Then("the balance carries two decimal places")
-    public void theBalanceCarriesCents() {
+    @Then("the balance carries no more than two decimal places")
+    public void theBalanceCarriesNoMoreThanCents() {
+        // The API returns money as a JSON number, so a balance of 100.00
+        // arrives as 100.0 and one of 100 arrives as 100. What can be asserted
+        // is that no balance carries a fraction smaller than a cent, which is
+        // the rule that actually matters for a ledger.
         String balance = response.jsonPath().get("balance").toString();
         assertThat(balance)
-                .as("a money field must carry exactly two decimal places")
-                .matches("-?\\d+\\.\\d{2}");
+                .as("a balance must not carry a fraction smaller than a cent")
+                .matches("-?\\d+(\\.\\d{1,2})?");
     }
 
     @Then("every account in the list belongs to that customer")
